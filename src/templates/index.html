@@ -6,9 +6,11 @@
     </head>
     <body>
         <ul>
-            <li>
-                TODO1
-            </li>
+            {% for d in data %}
+                <li>
+                    {{d.description}}
+                </li>
+            {% endfor %}
         </ul>
     </body>
 </html>

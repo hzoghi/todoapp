@@ -7,4 +7,10 @@ app=Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', data=[{
+        'description': 'TODO 1'
+    },{
+        'description': 'TODO 2'
+    }, {
+        'description': 'TODO 3'
+    }])
