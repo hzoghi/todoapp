@@ -1,7 +1,7 @@
 """
     Simple flask app to create a server for the todo app and handle the database
 """
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -23,3 +23,11 @@ db.create_all()
 @app.route('/')
 def index():
     return render_template('index.html', data=Todo.query.all())
+
+@app.route('/todos/create', methods = ['POST'])
+def create_todo():
+    description = request.form.get('description', '')
+    todo = Todo(description=description)
+    db.session.add(todo)
+    db.session.commit()
+    return redirect(url_for('index'))
