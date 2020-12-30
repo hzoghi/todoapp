@@ -37,16 +37,41 @@
                      data-id={{d.id}} {% if d.completed %} checked {% 
                     endif %}/>
                     {{d.description}}
-                    <button>&cross;</button>
+                    <button class='delete_button' data-id={{d.id}}>&cross;</button>
                 </li>
             {% endfor %}
         </ul>
         <script>
+            <!-- Handling deleting items -->
+            const x_buttons = document.querySelectorAll('.delete_button');
+            for (let i=0; i<x_buttons.length; i++){
+                const x_button=x_buttons[i];
+                x_button.onclick = function(e) {
+                    <!-- console.log("event", e); -->
+                    const clicked = e.detail > 0;
+                    const todoId = e.target.dataset['id'];
+                    fetch ('/todos/' + todoId + '/delete', {
+                        method: 'GET',
+                        headers: {
+                            'content-type' : 'text/plain'
+                        }
+                    })
+                    .then(function () {
+                            document.getElementById('error').className = 'hidden';
+                    })
+                    .catch(function () {
+                            document.getElementById('error').className = '';
+                    })                
+                }
+            }
+
+
+            <!-- Handling checkbox data-->
             const checkboxes = document.querySelectorAll('.check-completed');
             for (let i=0; i < checkboxes.length; i++) {
                 const checkbox = checkboxes[i];
                 checkbox.onchange = function(e) {
-                    console.log('event', e);
+                    <!-- console.log('event', e); -->
                     const newCompleted = e.target.checked;
                     const todoId = e.target.dataset['id'];
                     fetch('/todos/' + todoId + '/set-completed', {
@@ -68,6 +93,7 @@
                 }
             }
 
+            <!-- Handling todo item creation -->
             document.getElementById('form').onsubmit = function(e){
                 e.preventDefault();
                 fetch('/todos/create', {
