@@ -42,7 +42,7 @@
             {% endfor %}
         </ul>
         <script>
-            <!-- Handling deleting items -->
+            //Handling deleting items
             const xButtons = document.querySelectorAll('.delete_button');
             for (let i=0; i<xButtons.length; i++){
                 const xButton=xButtons[i];
@@ -52,12 +52,16 @@
                     const todoId = e.target.dataset['id'];
                     fetch ('/todos/' + todoId + '/delete', {
                         method: 'DELETE'                      
+                    })
+                    .then(function(){
+                        const item = e.target.parentElement;
+                        item.remove();
                     });                         
                 }
             }
 
 
-            <!-- Handling checkbox data-->
+            //Handling checkbox data
             const checkboxes = document.querySelectorAll('.check-completed');
             for (let i=0; i < checkboxes.length; i++) {
                 const checkbox = checkboxes[i];
@@ -84,7 +88,7 @@
                 }
             }
 
-            <!-- Handling todo item creation -->
+            //Handling todo item creation
             document.getElementById('form').onsubmit = function(e){
                 e.preventDefault();
                 fetch('/todos/create', {
