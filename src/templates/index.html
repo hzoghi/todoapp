@@ -43,25 +43,16 @@
         </ul>
         <script>
             <!-- Handling deleting items -->
-            const x_buttons = document.querySelectorAll('.delete_button');
-            for (let i=0; i<x_buttons.length; i++){
-                const x_button=x_buttons[i];
-                x_button.onclick = function(e) {
+            const xButtons = document.querySelectorAll('.delete_button');
+            for (let i=0; i<xButtons.length; i++){
+                const xButton=xButtons[i];
+                xButton.onclick = function(e) {
                     <!-- console.log("event", e); -->
                     const clicked = e.detail > 0;
                     const todoId = e.target.dataset['id'];
                     fetch ('/todos/' + todoId + '/delete', {
-                        method: 'GET',
-                        headers: {
-                            'content-type' : 'text/plain'
-                        }
-                    })
-                    .then(function () {
-                            document.getElementById('error').className = 'hidden';
-                    })
-                    .catch(function () {
-                            document.getElementById('error').className = '';
-                    })                
+                        method: 'DELETE'                      
+                    });                         
                 }
             }
 
