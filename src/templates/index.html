@@ -65,7 +65,6 @@
                 }
             }
 
-
             //Handling checkbox data
             const checkboxes = document.querySelectorAll('.check-completed');
             for (let i=0; i < checkboxes.length; i++) {
@@ -107,7 +106,6 @@
                 })
                 .then(response => response.json())               
                 .then(jsonResponse => {
-                    console.log(jsonResponse);
                     const LiItem = document.createElement('li');                                
                     
                     const checkbox = document.createElement('input');
@@ -124,9 +122,9 @@
                     deleteBtn.setAttribute('data-id', jsonResponse.id);
                     deleteBtn.innerHTML = '&cross;';
                     LiItem.appendChild(deleteBtn);
-                    console.log(LiItem);
 
                     document.getElementById('todos').appendChild(LiItem);
+                    window.location.reload(true);
                     document.getElementById('error').className = 'hidden';
                 })
                 .catch(function(){
