@@ -11,6 +11,16 @@
                 list-style: none;
                 padding: 0;
                 margin: 0;
+                width: 200px;
+                font-size: 20;
+            }
+            li button {
+                -webkit-appearance: none;
+                border: none;
+                outline: none;
+                color: red;
+                float: right;
+                cursor: pointer;
             }
         </style>
     </head>
@@ -23,17 +33,44 @@
         <ul id="todos">
             {% for d in data %}
                 <li>
-                    <input class="check-completed" type="checkbox" data-id={{d.id}} {% if d.completed %} checked {% endif %}/>
+                    <input class="check-completed" type="checkbox"
+                     data-id={{d.id}} {% if d.completed %} checked = True {% 
+                    endif %}/>
                     {{d.description}}
+                    <button class='delete_button' data-id={{d.id}}>&cross;</button>
                 </li>
             {% endfor %}
         </ul>
         <script>
+            //Handling deleting items
+            const xButtons = document.querySelectorAll('.delete_button');
+            for (let i=0; i<xButtons.length; i++){
+                const xButton=xButtons[i];
+                xButton.onclick = function(e) {
+                    //console.log("event", e);
+                    const todoId = e.target.dataset['id'];
+                    fetch ('/todos/' + todoId + '/delete', {
+                        method: 'DELETE'                      
+                    })
+                    .then(function () {
+                            document.getElementById('error').className = 'hidden';
+                    })
+                    .then(function(){
+                        const item = e.target.parentElement;
+                        item.remove();
+                    })
+                    .catch(function () {
+                            document.getElementById('error').className = '';
+                        })                         
+                }
+            }
+
+            //Handling checkbox data
             const checkboxes = document.querySelectorAll('.check-completed');
             for (let i=0; i < checkboxes.length; i++) {
                 const checkbox = checkboxes[i];
                 checkbox.onchange = function(e) {
-                    console.log('event', e);
+                    //console.log('event', e);
                     const newCompleted = e.target.checked;
                     const todoId = e.target.dataset['id'];
                     fetch('/todos/' + todoId + '/set-completed', {
@@ -55,6 +92,7 @@
                 }
             }
 
+            //Handling todo item creation
             document.getElementById('form').onsubmit = function(e){
                 e.preventDefault();
                 fetch('/todos/create', {
@@ -66,14 +104,27 @@
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(function(response){
-                    return response.json();               
-                })
-                .then(function(jsonResponse){
-                    console.log(jsonResponse);
-                    const LiItem = document.createElement('LI');
-                    LiItem.innerHTML = jsonResponse['description'];
+                .then(response => response.json())               
+                .then(jsonResponse => {
+                    const LiItem = document.createElement('li');                                
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox'
+                    checkbox.className = 'check-completed';
+                    checkbox.setAttribute('data-id', jsonResponse.id);
+                    LiItem.appendChild(checkbox);
+
+                    const text = document.createTextNode(' ' + jsonResponse.description);
+                    LiItem.appendChild(text);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-button';
+                    deleteBtn.setAttribute('data-id', jsonResponse.id);
+                    deleteBtn.innerHTML = '&cross;';
+                    LiItem.appendChild(deleteBtn);
+
                     document.getElementById('todos').appendChild(LiItem);
+                    window.location.reload(true);
                     document.getElementById('error').className = 'hidden';
                 })
                 .catch(function(){
