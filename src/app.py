@@ -21,8 +21,7 @@ class Todo(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('todolists.id'), nullable=False )
 
     def __repr__():
-        return f'<Todo id: {self.id}, decription: {self.description}, completed: {self.completed}, 
-        list_id = {self.list_id}>'
+        return f'<Todo id: {self.id}, decription: {self.description}, completed: {self.completed}, list_id = {self.list_id}>'
 
 class TodoList(db.Model):
     __tablename__='todolists'
