@@ -27,7 +27,7 @@ class TodoList(db.Model):
     __tablename__='todolists'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(), nullable = False)
-    todos = db.Relationship('Todo', backref='list', lazy=True)
+    todos = db.relationship('Todo', backref='list', lazy=True)
 
     def __repr__():
         return f'<TodoList id: {self.id}, name: {self.name}>'
