@@ -36,7 +36,9 @@
             <ul id="lists">
                 {%for list in lists%}
                 <li>
-                    {{list.name}}
+                    <a href="/lists/{{list.id}}">
+                        {{list.name}}
+                    </a>
                 </li>
                 {% endfor %}
             </ul>    
