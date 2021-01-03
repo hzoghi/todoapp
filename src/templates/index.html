@@ -33,6 +33,10 @@
     </head>
     <body>
         <div class="lists-wrapper">
+            <form id="form" method="post" action="/lists/create">
+                <input id="list_name" type="text" name="name" />
+                <input type="submit" value="Create" />
+            </form>
             <ul id="lists">
                 {%for list in lists%}
                 <li>
