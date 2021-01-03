@@ -35,6 +35,7 @@
         <div class="lists-wrapper">
             <h4> Lists </h4>
             <form id="list_form" method="post" action="/lists/create">
+                <input id = "list_id" type="hidden" value="{{active_list.id}}">
                 <input id="list_name" type="text" name="name" />
                 <input type="submit" value="Create" />
             </form>
@@ -119,17 +120,21 @@
             }
 
             //Handling todo item creation
-            document.getElementById('form').onsubmit = function(e){
+            const descInput = document.getElementById('description');
+            document.getElementById('form').onsubmit = function (e) {
                 e.preventDefault();
+                const desc = descInput.value;
+                descInput.value = '';
                 fetch('/todos/create', {
                     method: 'POST',
                     body: JSON.stringify({
-                        'description': document.getElementById('description').value
+                        'description': desc,
+                        'list_id': {{ active_list.id }}
                     }),
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
+                'Content-Type': 'application/json',
+                }
+               })
                 .then(response => response.json())               
                 .then(jsonResponse => {
                     const LiItem = document.createElement('li');                                
