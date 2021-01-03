@@ -174,14 +174,11 @@
                     .then(jsonResponse => {
                         const LiItem = document.createElement('li');
 
-                        checkbox.setAttribute('data-id', jsonResponse.id);
-                        LiItem.appendChild(checkbox);
-
                         const text = document.createTextNode(' ' + jsonResponse.name);
                         LiItem.appendChild(text);                    
 
                         document.getElementById('lists').appendChild(LiItem);
-                        //window.location.reload(true);
+                        window.location.reload(true);
                         document.getElementById('error').className = 'hidden';
                     })
                     .catch(function () {
