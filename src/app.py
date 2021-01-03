@@ -99,6 +99,33 @@ def get_list_todos(list_id):
     lists = TodoList.query.order_by('id').all(), 
     todos=Todo.query.filter_by(list_id=list_id).order_by('id').all())
 
+
+@app.route('/lists/create', methods = ['POST'])
+def create_list():
+    error = False
+    body = {}
+    try:
+        name = request.get_json()['name']
+        todo_list = TodoList(name=name)
+        db.session.add(todo_list)
+        db.session.commit()
+        body['id'] = todo_list.id
+        body['name'] = todo_list.name
+    except: 
+        db.session.rollback()
+        error = True
+        print(sys.exc_info())
+    finally:
+        db.session.close()
+    
+    if error:
+        abort(400)
+    else:
+        return jsonify(body)
+
+    
+
+
 @app.route('/')
 def index():
     return redirect(url_for('get_list_todos', list_id=1))

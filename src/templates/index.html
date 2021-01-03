@@ -33,6 +33,11 @@
     </head>
     <body>
         <div class="lists-wrapper">
+            <h4> Lists </h4>
+            <form id="list_form" method="post" action="/lists/create">
+                <input id="list_name" type="text" name="name" />
+                <input type="submit" value="Create" />
+            </form>
             <ul id="lists">
                 {%for list in lists%}
                 <li>
@@ -152,6 +157,34 @@
                     document.getElementById('error').className = '';
                 })
             }
+
+            //Handling list item creation
+            document.getElementById('list_form').onsubmit = function (e) {
+                e.preventDefault();
+                fetch('/lists/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        'name': document.getElementById('list_name').value
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(jsonResponse => {
+                        const LiItem = document.createElement('li');
+
+                        const text = document.createTextNode(' ' + jsonResponse.name);
+                        LiItem.appendChild(text);                    
+
+                        document.getElementById('lists').appendChild(LiItem);
+                        window.location.reload(true);
+                        document.getElementById('error').className = 'hidden';
+                    })
+                    .catch(function () {
+                        document.getElementById('error').className = '';
+                    })
+                }
         </script>
     </body>
 </html>
